@@ -1,0 +1,9 @@
+{
+    "name": "RollerEnemy",
+    "version_number": "1.0.3",
+    "website_url": "",
+    "description": "New spiky enemy, which rolls towards targets!",
+    "dependencies": [
+        "BepInEx-BepInExPack-5.4.2100"		
+    ]
+}
