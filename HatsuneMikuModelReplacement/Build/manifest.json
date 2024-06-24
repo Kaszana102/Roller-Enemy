@@ -1,7 +1,7 @@
 {
     "name": "RollerEnemy",
-    "version_number": "1.0.3",
-    "website_url": "",
+    "version_number": "1.0.4",
+    "website_url": "https://github.com/Kaszana102/Roller-enemy",
     "description": "New spiky enemy, which rolls towards targets!",
     "dependencies": [
         "BepInEx-BepInExPack-5.4.2100"		
