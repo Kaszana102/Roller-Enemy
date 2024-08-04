@@ -35,6 +35,7 @@ namespace RollerEnemy
 
         AudioSource Scream, Arm, Roll, WallHit,Open,Close;
 
+        GameObject radarCircle;
         public override void Start()
         {            
             // EnemyAI attributes
@@ -58,7 +59,7 @@ namespace RollerEnemy
             Close = transform.Find("AudioSources").Find("Close").GetComponent<AudioSource>();
 
             //set radar layer correct (sometimes it is loaded incorrectly, why?)
-            transform.Find("Circle").gameObject.layer = 1 << 14; //MapRadar layer
+            radarCircle = transform.Find("Circle").gameObject;            
         }
 
         public override void Update()
@@ -68,6 +69,12 @@ namespace RollerEnemy
 
             if (isEnemyDead) return;
 
+            if(radarCircle.layer != 14)
+            {
+                //Debug.Log("Radar layer: "+radarCircle.layer+", should be: " + (1<<14));
+                radarCircle.layer = 14; //MapRadar layer. Move to update, because it didn't always work in start
+            }
+                
 
             timeSinceHittingPlayer -= Time.deltaTime;
             stateTimeLeft -= Time.deltaTime;
@@ -109,9 +116,12 @@ namespace RollerEnemy
                             if (player != null)
                             {                                
                                 targetedPlayer = player.transform;
-                                startSeeingPlayer = Time.time;                                
-                                player.JumpToFearLevel(1f);                                
-                                Scream.Play();
+                                startSeeingPlayer = Time.time;
+                                if (player.actualClientId == GameNetworkManager.Instance.localPlayerController.actualClientId)
+                                {
+                                    player.JumpToFearLevel(1f);
+                                }                                
+                                Scream.Play();                                
                             }
                         }
                         else
@@ -205,9 +215,9 @@ namespace RollerEnemy
         {            
 
             //check first eye
-            PlayerControllerB[] allPlayersInLineOfSight = GetAllPlayersInLineOfSight(30f, 70, eye, 3f);
+            PlayerControllerB[] allPlayersInLineOfSight = GetAllPlayersInLineOfSight(30f, 70, eye, 3f);            
             if(allPlayersInLineOfSight!= null && allPlayersInLineOfSight.Length > 0)
-            {
+            {                
                 usingFirstEye = true;
                 return allPlayersInLineOfSight[0];
             }
@@ -250,7 +260,10 @@ namespace RollerEnemy
                 {
                     timeSinceHittingPlayer = 0.5f;
                     playerControllerB.DamagePlayer(90, hasDamageSFX: true, callRPC: true, CauseOfDeath.Mauling, 2);
-                    playerControllerB.JumpToFearLevel(1f);
+                    if (playerControllerB.actualClientId == GameNetworkManager.Instance.localPlayerController.actualClientId)
+                    {
+                        playerControllerB.JumpToFearLevel(1f);
+                    }                                        
                 }
             }
         }

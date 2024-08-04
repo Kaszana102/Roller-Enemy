@@ -1,6 +1,6 @@
 {
     "name": "RollerEnemy",
-    "version_number": "1.0.4",
+    "version_number": "1.0.5",
     "website_url": "https://github.com/Kaszana102/Roller-enemy",
     "description": "New spiky enemy, which rolls towards targets!",
     "dependencies": [
